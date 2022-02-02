@@ -24,21 +24,24 @@ newBuildNumber=$((previousBuildNumber + 1))
 sed -i "s/$previousVersion/$newVersion/g" pubspec.yaml
 
 # git task
-commitMessage="Update version to $newVersion"
-git add pubspec.yaml
-git commit -m "$commitMessage"
+git add .
+git commit -m "Update version to $newVersion"
 git push
 
 # build the apk
 flutter build apk --split-per-abi --release --build-name=$newVersion --build-number=$newBuildNumber
 
-# rename the apks
-cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ~/Documents/$appName-$newVersion-arm.apk
-cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ~/Documents/$appName-$newVersion-arm64.apk
+# create a folder named $appName if it doesn't exist
+if [ ! -d ~/Documents/$appName ]; then
+    mkdir ~/Documents/$appName
+fi
 
-echo "$appName has been built and saved to ~/Documents"
+# rename the apks
+cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ~/Documents/$appName/$appName-$newVersion-arm.apk
+cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ~/Documents/$appName/$appName-$newVersion-arm64.apk
+
+echo "$appName has been built and saved to ~/Documents/$appName"
 echo "Previous Version was $previousVersion"
 echo "New Version is $newVersion"
 echo "Previous Build Number $previousBuildNumber"
 echo "New Build Number is $newBuildNumber"
-
