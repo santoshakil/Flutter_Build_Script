@@ -5,7 +5,7 @@
 # get the app name from pubspec.yaml
 appName=$(cat pubspec.yaml | grep name | awk '{print $2}' | tr -d '"')
 
-# get the prevois version
+# get the previous version
 previousVersion=$(grep -oP '(?<=version: ).*' pubspec.yaml)
 
 # get the current version
@@ -36,12 +36,12 @@ if [ ! -d ~/Documents/$appName ]; then
     mkdir ~/Documents/$appName
 fi
 
-# rename the apks
-cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ~/Documents/$appName/$appName-$newVersion-arm.apk
-cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ~/Documents/$appName/$appName-$newVersion-arm64.apk
+# rename the apks and move them to the Documents/$appName folder
+cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ~/Documents/$appName/$appName-arm-$newVersion.apk
+cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ~/Documents/$appName/$appName-arm64-$newVersion.apk
 
 echo "$appName has been built and saved to ~/Documents/$appName"
 echo "Previous Version was $previousVersion"
-echo "New Version is $newVersion"
 echo "Previous Build Number $previousBuildNumber"
+echo "New Version is $newVersion"
 echo "New Build Number is $newBuildNumber"
